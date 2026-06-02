@@ -1,0 +1,140 @@
+# Transacting
+
+Once funds are shielded in the Bermuda pool, they can be transferred privately
+between Bermuda accounts.
+
+Internal transfers are fully confidential - the sender, recipient, amount, and
+transaction history are invisible to outside observers.
+
+**Important**: Always use the built-in broadcaster when transacting within the
+pool to ensure that you don't accidentally create on-chain linkages between
+accounts.
+
+## Transacting from an EOA
+
+With an [EOA](/bermuda/accounts#eoa-accounts) account the transfer is authorized
+directly by the account's signer - simply prepare the operation and relay it
+with the built-in broadcaster.
+
+:::code-group
+
+```ts [transfer.ts] filename="transfer.ts"
+import { host, signer } from "./config"
+import { createBermudaPlugin } from "@kohaku-eth/bermuda";
+
+const contract = process.env.WETH_ADDRESS;
+const bob = process.env.BOB_BERMUDA_SHIELDED_ADDRESS;
+
+const plugin = await createBermudaPlugin(host, signer);
+
+const to = bob;
+const amount = 1n;
+const asset = {
+  asset: {
+    __type: "erc20",
+    contract,
+  },
+  amount,
+};
+
+const operation = await plugin.prepareTransfer(asset, to);
+
+await plugin.broadcast(operation);
+```
+
+```ts [config.ts] filename="config.ts"
+import { JsonRpcProvider, Wallet } from "ethers";
+
+const rpcURL = process.env.RPC_URL;
+const privateKey = process.env.PRIVATE_KEY;
+
+const provider = new JsonRpcProvider(rpcURL);
+export const signer = new Wallet(privateKey, provider);
+
+// This is the (mocked) Kohaku host.
+export const host = {
+  provider: {
+    ...provider,
+    getChainId: async () => (await provider.getNetwork()).chainId,
+  },
+};
+```
+
+:::
+
+## Transacting from a Safe
+
+With a [Safe](/bermuda/accounts#safe-accounts) account the transfer is
+authorized by the Safe's owners through the same **propose / confirm / execute**
+flow used for [shielding](/bermuda/shielding#shielding-from-a-safe): one owner
+proposes (status `"proposed"`, carrying a `proposalId`), every other owner
+confirms with that `proposalId` (status `"pending"`), and once the threshold is
+met an owner executes (status `"ready"`) and broadcasts.
+
+Note that `alice` and `bob` below are co-owners of the *sending* Safe, while
+`recipient` is the shielded address of the party being paid.
+
+:::code-group
+
+```ts [transfer.ts] filename="transfer.ts"
+import { alicePlugin, bobPlugin } from "./config";
+
+const contract = process.env.WETH_ADDRESS;
+const recipient = process.env.RECIPIENT_BERMUDA_SHIELDED_ADDRESS;
+
+const to = recipient;
+const amount = 1n;
+const asset = {
+  asset: {
+    __type: "erc20",
+    contract,
+  },
+  amount,
+};
+
+// 1. One owner proposes the transfer.
+const { proposalId } = await alicePlugin.prepareTransfer(asset, to);
+
+// 2. Every other owner confirms it using the same proposal id.
+await bobPlugin.prepareTransfer(asset, to, proposalId);
+
+// 3. Once the Safe's threshold is met, an owner executes and broadcasts.
+const operation = await alicePlugin.prepareTransfer(asset, to, proposalId);
+
+await alicePlugin.broadcast(operation);
+```
+
+```ts [config.ts] filename="config.ts"
+import { JsonRpcProvider, Wallet } from "ethers";
+import { createBermudaSafePlugin, KeyGenState } from "@kohaku-eth/bermuda";
+
+const provider = new JsonRpcProvider(process.env.RPC_URL);
+const safeAddress = process.env.SAFE_ADDRESS;
+
+// Signers for two of the sending Safe's owners.
+const aliceSigner = new Wallet(process.env.ALICE_PRIVATE_KEY, provider);
+const bobSigner = new Wallet(process.env.BOB_PRIVATE_KEY, provider);
+
+// This is the (mocked) Kohaku host.
+const host = {
+  provider: {
+    ...provider,
+    getChainId: async () => (await provider.getNetwork()).chainId,
+  },
+};
+
+export const alicePlugin = await createBermudaSafePlugin(host, aliceSigner, safeAddress);
+export const bobPlugin = await createBermudaSafePlugin(host, bobSigner, safeAddress);
+
+// Run the distributed key generation ceremony once before preparing operations.
+// See the Accounts page for details.
+let sessionId: string | undefined;
+let next: KeyGenState | null = null;
+
+do {
+  ({ next, sessionId } = await alicePlugin.runNextKeyGenStep(sessionId));
+  await bobPlugin.runNextKeyGenStep(sessionId);
+} while (next !== null);
+```
+
+:::

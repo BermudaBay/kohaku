@@ -1,0 +1,206 @@
+{
+  "abi": [
+    {
+      "type": "function",
+      "name": "createProxyWithNonce",
+      "inputs": [
+        { "name": "_singleton", "type": "address", "internalType": "address" },
+        { "name": "initializer", "type": "bytes", "internalType": "bytes" },
+        { "name": "saltNonce", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [
+        {
+          "name": "proxy",
+          "type": "address",
+          "internalType": "contract SafeMockProxy"
+        }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "proxyCreationCode",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "bytes", "internalType": "bytes" }],
+      "stateMutability": "pure"
+    },
+    {
+      "type": "function",
+      "name": "proxyCreationCodehash",
+      "inputs": [
+        { "name": "_singleton", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
+      "stateMutability": "pure"
+    },
+    {
+      "type": "event",
+      "name": "ProxyCreation",
+      "inputs": [
+        {
+          "name": "proxy",
+          "type": "address",
+          "indexed": true,
+          "internalType": "contract SafeMockProxy"
+        },
+        {
+          "name": "singleton",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    }
+  ],
+  "bytecode": {
+    "object": "0x6080604052348015600e575f5ffd5b506105f28061001c5f395ff3fe608060405234801561000f575f5ffd5b506004361061003f575f3560e01c80631688f0b9146100435780631fdac6c51461007357806353e5d93514610094575b5f5ffd5b610056610051366004610322565b6100a9565b6040516001600160a01b0390911681526020015b60405180910390f35b6100866100813660046103ef565b61013d565b60405190815260200161006a565b61009c610198565b60405161006a919061040f565b5f5f8380519060200120836040516020016100ce929190918252602082015260400190565b6040516020818303038152906040528051906020012090506100f18585836101c2565b6040516001600160a01b038781168252919350908316907f4f51faf6c4561ff95f067657e43439f0f856d97c04d9ec9070a6199ad418e2359060200160405180910390a2509392505050565b5f6040518060200161014e906102e6565b601f1982820381018352601f90910116604081905261017b91906001600160a01b03851690602001610444565b604051602081830303815290604052805190602001209050919050565b6060604051806020016101aa906102e6565b601f1982820381018352601f90910116604052919050565b5f833b6102165760405162461bcd60e51b815260206004820152601f60248201527f53696e676c65746f6e20636f6e7472616374206e6f74206465706c6f7965640060448201526064015b60405180910390fd5b5f60405180602001610227906102e6565b601f1982820381018352601f90910116604081905261025491906001600160a01b03881690602001610444565b6040516020818303038152906040529050828151826020015ff591506001600160a01b0382166102bc5760405162461bcd60e51b815260206004820152601360248201527210dc99585d194c8818d85b1b0819985a5b1959606a1b604482015260640161020d565b8351156102de575f5f8551602087015f865af16102de576040513d5f823e3d81fd5b509392505050565b61015e8061045f83390190565b80356001600160a01b0381168114610309575f5ffd5b919050565b634e487b7160e01b5f52604160045260245ffd5b5f5f5f60608486031215610334575f5ffd5b61033d846102f3565b9250602084013567ffffffffffffffff811115610358575f5ffd5b8401601f81018613610368575f5ffd5b803567ffffffffffffffff8111156103825761038261030e565b604051601f8201601f19908116603f0116810167ffffffffffffffff811182821017156103b1576103b161030e565b6040528181528282016020018810156103c8575f5ffd5b816020840160208301375f9181016020019190915293969395505050506040919091013590565b5f602082840312156103ff575f5ffd5b610408826102f3565b9392505050565b602081525f82518060208401528060208501604085015e5f604082850101526040601f19601f83011684010191505092915050565b5f83518060208601845e919091019182525060200191905056fe6080604052348015600e575f5ffd5b5060405161015e38038061015e833981016040819052602b9160b2565b6001600160a01b038116608f5760405162461bcd60e51b815260206004820152602260248201527f496e76616c69642073696e676c65746f6e20616464726573732070726f766964604482015261195960f21b606482015260840160405180910390fd5b5f80546001600160a01b0319166001600160a01b039290921691909117905560dd565b5f6020828403121560c1575f5ffd5b81516001600160a01b038116811460d6575f5ffd5b9392505050565b6075806100e95f395ff3fe60806040525f5463a619486e5f3560e01c036021578060601b606c5260206060f35b365f5f375f5f365f845af490503d5f5f3e80603a573d5ffd5b503d5ff3fea264697066735822122092b79f924257fbc81888545a6df62d31c2a4378962fb65d05588cb297d7fd91064736f6c634300081e0033a2646970667358221220b39ad41a18037c3863973886c05d6c76a499928d90e1f191b3900ab374be4ded64736f6c634300081e0033",
+    "sourceMap": "593:2356:5:-:0;;;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x608060405234801561000f575f5ffd5b506004361061003f575f3560e01c80631688f0b9146100435780631fdac6c51461007357806353e5d93514610094575b5f5ffd5b610056610051366004610322565b6100a9565b6040516001600160a01b0390911681526020015b60405180910390f35b6100866100813660046103ef565b61013d565b60405190815260200161006a565b61009c610198565b60405161006a919061040f565b5f5f8380519060200120836040516020016100ce929190918252602082015260400190565b6040516020818303038152906040528051906020012090506100f18585836101c2565b6040516001600160a01b038781168252919350908316907f4f51faf6c4561ff95f067657e43439f0f856d97c04d9ec9070a6199ad418e2359060200160405180910390a2509392505050565b5f6040518060200161014e906102e6565b601f1982820381018352601f90910116604081905261017b91906001600160a01b03851690602001610444565b604051602081830303815290604052805190602001209050919050565b6060604051806020016101aa906102e6565b601f1982820381018352601f90910116604052919050565b5f833b6102165760405162461bcd60e51b815260206004820152601f60248201527f53696e676c65746f6e20636f6e7472616374206e6f74206465706c6f7965640060448201526064015b60405180910390fd5b5f60405180602001610227906102e6565b601f1982820381018352601f90910116604081905261025491906001600160a01b03881690602001610444565b6040516020818303038152906040529050828151826020015ff591506001600160a01b0382166102bc5760405162461bcd60e51b815260206004820152601360248201527210dc99585d194c8818d85b1b0819985a5b1959606a1b604482015260640161020d565b8351156102de575f5f8551602087015f865af16102de576040513d5f823e3d81fd5b509392505050565b61015e8061045f83390190565b80356001600160a01b0381168114610309575f5ffd5b919050565b634e487b7160e01b5f52604160045260245ffd5b5f5f5f60608486031215610334575f5ffd5b61033d846102f3565b9250602084013567ffffffffffffffff811115610358575f5ffd5b8401601f81018613610368575f5ffd5b803567ffffffffffffffff8111156103825761038261030e565b604051601f8201601f19908116603f0116810167ffffffffffffffff811182821017156103b1576103b161030e565b6040528181528282016020018810156103c8575f5ffd5b816020840160208301375f9181016020019190915293969395505050506040919091013590565b5f602082840312156103ff575f5ffd5b610408826102f3565b9392505050565b602081525f82518060208401528060208501604085015e5f604082850101526040601f19601f83011684010191505092915050565b5f83518060208601845e919091019182525060200191905056fe6080604052348015600e575f5ffd5b5060405161015e38038061015e833981016040819052602b9160b2565b6001600160a01b038116608f5760405162461bcd60e51b815260206004820152602260248201527f496e76616c69642073696e676c65746f6e20616464726573732070726f766964604482015261195960f21b606482015260840160405180910390fd5b5f80546001600160a01b0319166001600160a01b039290921691909117905560dd565b5f6020828403121560c1575f5ffd5b81516001600160a01b038116811460d6575f5ffd5b9392505050565b6075806100e95f395ff3fe60806040525f5463a619486e5f3560e01c036021578060601b606c5260206060f35b365f5f375f5f365f845af490503d5f5f3e80603a573d5ffd5b503d5ff3fea264697066735822122092b79f924257fbc81888545a6df62d31c2a4378962fb65d05588cb297d7fd91064736f6c634300081e0033a2646970667358221220b39ad41a18037c3863973886c05d6c76a499928d90e1f191b3900ab374be4ded64736f6c634300081e0033",
+    "sourceMap": "593:2356:5:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2258:353;;;;;;:::i;:::-;;:::i;:::-;;;-1:-1:-1;;;;;1655:32:27;;;1637:51;;1625:2;1610:18;2258:353:5;;;;;;;;829:196;;;;;;:::i;:::-;;:::i;:::-;;;2036:25:27;;;2024:2;2009:18;829:196:5;1890:177:27;703:120:5;;;:::i;:::-;;;;;;;:::i;2258:353::-;2385:19;2420:12;2472:11;2462:22;;;;;;2486:9;2445:51;;;;;;;;2650:19:27;;;2694:2;2685:12;;2678:28;2731:2;2722:12;;2493:247;2445:51:5;;;;;;;;;;;;;2435:62;;;;;;2420:77;;2515:42;2527:10;2539:11;2552:4;2515:11;:42::i;:::-;2572:32;;-1:-1:-1;;;;;1655:32:27;;;1637:51;;2507:50:5;;-1:-1:-1;2572:32:5;;;;;;1625:2:27;1610:18;2572:32:5;;;;;;;2410:201;2258:353;;;;;:::o;829:196::-;901:7;954:32;;;;;;;;:::i;:::-;-1:-1:-1;;954:32:5;;;;;;;;;;;;;;;;937:80;;954:32;-1:-1:-1;;;;;988:28:5;;;954:32;937:80;;:::i;:::-;;;;;;;;;;;;;927:91;;;;;;920:98;;829:196;;;:::o;703:120::-;753:12;784:32;;;;;;;;:::i;:::-;-1:-1:-1;;784:32:5;;;;;;;;;;;;;;;703:120;-1:-1:-1;703:120:5:o;1031:1221::-;1146:19;2838:20;;1181:66;;;;-1:-1:-1;;;1181:66:5;;3505:2:27;1181:66:5;;;3487:21:27;3544:2;3524:18;;;3517:30;3583:33;3563:18;;;3556:61;3634:18;;1181:66:5;;;;;;;;;1258:27;1318:32;;;;;;;;:::i;:::-;-1:-1:-1;;1318:32:5;;;;;;;;;;;;;;;;1288:114;;1318:32;-1:-1:-1;;;;;1364:28:5;;;1318:32;1288:114;;:::i;:::-;;;;;;;;;;;;;1258:144;;1599:4;1582:14;1576:21;1559:14;1553:4;1549:25;1544:3;1536:68;1527:77;-1:-1:-1;;;;;;1679:28:5;;1671:60;;;;-1:-1:-1;;;1671:60:5;;3865:2:27;1671:60:5;;;3847:21:27;3904:2;3884:18;;;3877:30;-1:-1:-1;;;3923:18:27;;;3916:49;3982:18;;1671:60:5;3663:343:27;1671:60:5;1746:18;;:22;1742:504;;1990:1;1987;1973:11;1967:18;1960:4;1947:11;1943:22;1940:1;1933:5;1926;1921:71;1911:259;;2033:4;2027:11;2085:16;2079:4;2074:3;2059:43;2135:16;2130:3;2123:29;1911:259;1171:1081;1031:1221;;;;;:::o;-1:-1:-1:-;;;;;;;;:::o;14:173:27:-;82:20;;-1:-1:-1;;;;;131:31:27;;121:42;;111:70;;177:1;174;167:12;111:70;14:173;;;:::o;192:127::-;253:10;248:3;244:20;241:1;234:31;284:4;281:1;274:15;308:4;305:1;298:15;324:1132;410:6;418;426;479:2;467:9;458:7;454:23;450:32;447:52;;;495:1;492;485:12;447:52;518:29;537:9;518:29;:::i;:::-;508:39;;598:2;587:9;583:18;570:32;625:18;617:6;614:30;611:50;;;657:1;654;647:12;611:50;680:22;;733:4;725:13;;721:27;-1:-1:-1;711:55:27;;762:1;759;752:12;711:55;802:2;789:16;828:18;820:6;817:30;814:56;;;850:18;;:::i;:::-;899:2;893:9;991:2;953:17;;-1:-1:-1;;949:31:27;;;982:2;945:40;941:54;929:67;;1026:18;1011:34;;1047:22;;;1008:62;1005:88;;;1073:18;;:::i;:::-;1109:2;1102:22;1133;;;1174:15;;;1191:2;1170:24;1167:37;-1:-1:-1;1164:57:27;;;1217:1;1214;1207:12;1164:57;1273:6;1268:2;1264;1260:11;1255:2;1247:6;1243:15;1230:50;1326:1;1300:19;;;1321:2;1296:28;1289:39;;;;324:1132;;1304:6;;-1:-1:-1;;;;1422:2:27;1407:18;;;;1394:32;;324:1132::o;1699:186::-;1758:6;1811:2;1799:9;1790:7;1786:23;1782:32;1779:52;;;1827:1;1824;1817:12;1779:52;1850:29;1869:9;1850:29;:::i;:::-;1840:39;1699:186;-1:-1:-1;;;1699:186:27:o;2072:416::-;2219:2;2208:9;2201:21;2182:4;2251:6;2245:13;2294:6;2289:2;2278:9;2274:18;2267:34;2353:6;2348:2;2340:6;2336:15;2331:2;2320:9;2316:18;2310:50;2409:1;2404:2;2395:6;2384:9;2380:22;2376:31;2369:42;2479:2;2472;2468:7;2463:2;2455:6;2451:15;2447:29;2436:9;2432:45;2428:54;2420:62;;;2072:416;;;;:::o;2953:345::-;3110:3;3148:6;3142:13;3194:6;3187:4;3179:6;3175:17;3170:3;3164:37;3220:16;;;;3245:18;;;-1:-1:-1;3287:4:27;3279:13;;2953:345;-1:-1:-1;2953:345:27:o",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "createProxyWithNonce(address,bytes,uint256)": "1688f0b9",
+    "proxyCreationCode()": "53e5d935",
+    "proxyCreationCodehash(address)": "1fdac6c5"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"contract SafeMockProxy\",\"name\":\"proxy\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"singleton\",\"type\":\"address\"}],\"name\":\"ProxyCreation\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_singleton\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"initializer\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"saltNonce\",\"type\":\"uint256\"}],\"name\":\"createProxyWithNonce\",\"outputs\":[{\"internalType\":\"contract SafeMockProxy\",\"name\":\"proxy\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxyCreationCode\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_singleton\",\"type\":\"address\"}],\"name\":\"proxyCreationCodehash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"SafeMockProxyFactory\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"CREATE2 factory for `SafeMockProxy`. Mirrors the canonical Safe         v1.5.0 `SafeProxyFactory` API \\u2014 `createProxyWithNonce(singleton,         initializer, saltNonce)` \\u2014 with the same salt derivation         (`keccak256(keccak256(initializer) || saltNonce)`) so CREATE2         addresses are predictable off-chain.         See: lib/pool/lib/safe-smart-account/contracts/proxies/SafeProxyFactory.sol\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/SafeMockProxyFactory.sol\":\"SafeMockProxyFactory\"},\"evmVersion\":\"prague\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":100},\"remappings\":[\":@openzeppelin/=lib/compliance/lib/openzeppelin-contracts/\",\":@poseidon2-evm/=lib/pool/lib/poseidon2-evm/src/\",\":@predicate/=lib/compliance/lib/predicate-contracts/\",\":@safe-global/safe-smart-account/=lib/pool/lib/safe-smart-account/\",\":@uniswap/v2-periphery/=lib/pool/lib/v2-periphery/\",\":compliance/=lib/compliance/\",\":ds-test/=lib/predicate-contracts/lib/forge-std/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/\",\":forge-std/=lib/predicate-contracts/lib/forge-std/src/\",\":foundry-huff/=lib/pool/lib/poseidon2-evm/lib/foundry-huff/src/\",\":halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/\",\":hardhat/=node_modules/hardhat/\",\":huffmate/=lib/pool/lib/poseidon2-evm/lib/huffmate/src/\",\":multicall/=lib/multicall/\",\":openzeppelin-contracts-upgradeable/=lib/predicate-contracts/lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":openzeppelin-foundry-upgrades/=lib/predicate-contracts/lib/openzeppelin-foundry-upgrades/src/\",\":openzeppelin-upgradeable/=lib/predicate-contracts/lib/openzeppelin-contracts-upgradeable/contracts/\",\":pool/=lib/pool/src/\",\":poseidon2-evm/=lib/pool/lib/poseidon2-evm/src/\",\":predicate-contracts/=lib/predicate-contracts/src/\",\":safe-smart-account/=lib/pool/lib/safe-smart-account/\",\":solidity-stringutils/=lib/pool/lib/poseidon2-evm/lib/foundry-huff/lib/solidity-stringutils/\",\":solmate/=lib/predicate-contracts/lib/solmate/src/\",\":stringutils/=lib/pool/lib/poseidon2-evm/lib/foundry-huff/lib/solidity-stringutils/\",\":stx-circuit/=lib/stx-circuit/\",\":utils/=lib/predicate-contracts/lib/utils/\"]},\"sources\":{\"contracts/SafeMockProxy.sol\":{\"keccak256\":\"0xc75da9737466226f717bac77ee354ebad932d4cef90dfec8d9bf2fbb1098577e\",\"license\":\"LGPL-3.0-only\",\"urls\":[\"bzz-raw://9fc7651abf9e0e9407e309e9e8bc0275c181fc5615ae01762766067be0f0a8b3\",\"dweb:/ipfs/QmdUCZ8uuec6sqBJ3m9FTABWCpmmw5zaMLFAVYpE4UFXzp\"]},\"contracts/SafeMockProxyFactory.sol\":{\"keccak256\":\"0xbada18457d12550155e54779b5aaa720df529f872c15ee1b7fb8361c9712637e\",\"license\":\"LGPL-3.0-only\",\"urls\":[\"bzz-raw://b7b8a467f4d2fcbc3e6bb50a35ef8db77d1d464c23fed7f598af2e1936d52ecc\",\"dweb:/ipfs/QmVxsn3uV2umrDXCCmVgxLtz3ezGnJ2tBVvopve4yL9N7d\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": { "version": "0.8.30+commit.73712a01" },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "contract SafeMockProxy",
+              "name": "proxy",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "singleton",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ProxyCreation",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_singleton",
+              "type": "address"
+            },
+            { "internalType": "bytes", "name": "initializer", "type": "bytes" },
+            {
+              "internalType": "uint256",
+              "name": "saltNonce",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "createProxyWithNonce",
+          "outputs": [
+            {
+              "internalType": "contract SafeMockProxy",
+              "name": "proxy",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "proxyCreationCode",
+          "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_singleton",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "proxyCreationCodehash",
+          "outputs": [
+            { "internalType": "bytes32", "name": "", "type": "bytes32" }
+          ]
+        }
+      ],
+      "devdoc": { "kind": "dev", "methods": {}, "version": 1 },
+      "userdoc": { "kind": "user", "methods": {}, "version": 1 }
+    },
+    "settings": {
+      "remappings": [
+        "@openzeppelin/=lib/compliance/lib/openzeppelin-contracts/",
+        "@poseidon2-evm/=lib/pool/lib/poseidon2-evm/src/",
+        "@predicate/=lib/compliance/lib/predicate-contracts/",
+        "@safe-global/safe-smart-account/=lib/pool/lib/safe-smart-account/",
+        "@uniswap/v2-periphery/=lib/pool/lib/v2-periphery/",
+        "compliance/=lib/compliance/",
+        "ds-test/=lib/predicate-contracts/lib/forge-std/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+        "forge-std/=lib/predicate-contracts/lib/forge-std/src/",
+        "foundry-huff/=lib/pool/lib/poseidon2-evm/lib/foundry-huff/src/",
+        "halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+        "hardhat/=node_modules/hardhat/",
+        "huffmate/=lib/pool/lib/poseidon2-evm/lib/huffmate/src/",
+        "multicall/=lib/multicall/",
+        "openzeppelin-contracts-upgradeable/=lib/predicate-contracts/lib/openzeppelin-contracts-upgradeable/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "openzeppelin-foundry-upgrades/=lib/predicate-contracts/lib/openzeppelin-foundry-upgrades/src/",
+        "openzeppelin-upgradeable/=lib/predicate-contracts/lib/openzeppelin-contracts-upgradeable/contracts/",
+        "pool/=lib/pool/src/",
+        "poseidon2-evm/=lib/pool/lib/poseidon2-evm/src/",
+        "predicate-contracts/=lib/predicate-contracts/src/",
+        "safe-smart-account/=lib/pool/lib/safe-smart-account/",
+        "solidity-stringutils/=lib/pool/lib/poseidon2-evm/lib/foundry-huff/lib/solidity-stringutils/",
+        "solmate/=lib/predicate-contracts/lib/solmate/src/",
+        "stringutils/=lib/pool/lib/poseidon2-evm/lib/foundry-huff/lib/solidity-stringutils/",
+        "stx-circuit/=lib/stx-circuit/",
+        "utils/=lib/predicate-contracts/lib/utils/"
+      ],
+      "optimizer": { "enabled": true, "runs": 100 },
+      "metadata": { "bytecodeHash": "ipfs" },
+      "compilationTarget": {
+        "contracts/SafeMockProxyFactory.sol": "SafeMockProxyFactory"
+      },
+      "evmVersion": "prague",
+      "libraries": {}
+    },
+    "sources": {
+      "contracts/SafeMockProxy.sol": {
+        "keccak256": "0xc75da9737466226f717bac77ee354ebad932d4cef90dfec8d9bf2fbb1098577e",
+        "urls": [
+          "bzz-raw://9fc7651abf9e0e9407e309e9e8bc0275c181fc5615ae01762766067be0f0a8b3",
+          "dweb:/ipfs/QmdUCZ8uuec6sqBJ3m9FTABWCpmmw5zaMLFAVYpE4UFXzp"
+        ],
+        "license": "LGPL-3.0-only"
+      },
+      "contracts/SafeMockProxyFactory.sol": {
+        "keccak256": "0xbada18457d12550155e54779b5aaa720df529f872c15ee1b7fb8361c9712637e",
+        "urls": [
+          "bzz-raw://b7b8a467f4d2fcbc3e6bb50a35ef8db77d1d464c23fed7f598af2e1936d52ecc",
+          "dweb:/ipfs/QmVxsn3uV2umrDXCCmVgxLtz3ezGnJ2tBVvopve4yL9N7d"
+        ],
+        "license": "LGPL-3.0-only"
+      }
+    },
+    "version": 1
+  },
+  "id": 5
+}

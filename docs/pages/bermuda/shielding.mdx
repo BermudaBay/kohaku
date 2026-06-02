@@ -1,0 +1,196 @@
+# Shielding
+
+Shielding is the process of moving funds between the public and private layers.
+Depositing public ERC-20 tokens into the Bermuda pool **shields** them - making
+balances and subsequent activity invisible to outside observers.
+
+## Shielding from an EOA
+
+To shield native ETH use the `native` asset type and ensure that the
+`msg.value` property is set when broadcasting the transaction.
+
+:::code-group
+
+```ts [shield.ts] filename="shield.ts"
+import { host, signer, provider } from "./config"
+import { createBermudaPlugin } from "@kohaku-eth/bermuda";
+
+const plugin = await createBermudaPlugin(host, signer);
+
+const to = await plugin.instanceId();
+const amount = 1n;
+const asset = {
+  asset: {
+    __type: "native",
+  },
+  amount,
+};
+
+const operation = await plugin.prepareShield(asset, to);
+
+const response = await signer.sendTransaction({
+  ...operation.payload,
+  value: amount, // Ensure that the `msg.value` property is set correctly.
+  gasLimit: 7_000_000,
+});
+
+await provider.waitForTransaction(response.hash);
+```
+
+```ts [config.ts] filename="config.ts"
+import { JsonRpcProvider, Wallet } from "ethers";
+
+const rpcURL = process.env.RPC_URL;
+const privateKey = process.env.PRIVATE_KEY;
+
+export const provider = new JsonRpcProvider(rpcURL);
+export const signer = new Wallet(privateKey, provider);
+
+// This is the (mocked) Kohaku host.
+export const host = {
+  provider: {
+    ...provider,
+    getChainId: async () => (await provider.getNetwork()).chainId,
+  },
+};
+```
+
+:::
+
+To shield an ERC-20 token simply use the token's address. Unlike the native
+flow, no `value` is attached to the transaction - the tokens are pulled via an
+EIP-2612 permit baked into the payload, so no separate `approve` transaction is
+required.
+
+:::code-group
+
+```ts [shield.ts] filename="shield.ts"
+import { host, signer, provider } from "./config"
+import { createBermudaPlugin } from "@kohaku-eth/bermuda";
+
+const contract = process.env.USDC_ADDRESS;
+
+const plugin = await createBermudaPlugin(host, signer);
+
+const to = await plugin.instanceId();
+const amount = 1n;
+const asset = {
+  asset: {
+    __type: "erc20",
+    contract,
+  },
+  amount,
+};
+
+const operation = await plugin.prepareShield(asset, to);
+
+const response = await signer.sendTransaction({
+  ...operation.payload,
+  gasLimit: 7_000_000,
+});
+
+await provider.waitForTransaction(response.hash);
+```
+
+```ts [config.ts] filename="config.ts"
+import { JsonRpcProvider, Wallet } from "ethers";
+
+const rpcURL = process.env.RPC_URL;
+const privateKey = process.env.PRIVATE_KEY;
+
+export const provider = new JsonRpcProvider(rpcURL);
+export const signer = new Wallet(privateKey, provider);
+
+// This is the (mocked) Kohaku host.
+export const host = {
+  provider: {
+    ...provider,
+    getChainId: async () => (await provider.getNetwork()).chainId,
+  },
+};
+```
+
+:::
+
+## Shielding from a Safe
+
+With a [Safe](/bermuda/accounts#safe-accounts) account every operation is
+authorized by the Safe's owners through a **propose / confirm / execute** flow
+rather than a single signature. Each `prepare*` call returns an operation whose
+`status` reflects where it sits in that flow:
+
+1. **Propose** - one owner calls `prepareShield` without a `proposalId`. The
+returned operation has status `"proposed"` and carries a `proposalId`.
+2. **Confirm** - every other owner calls `prepareShield` again with that
+`proposalId`. While the Safe's confirmation threshold has not been met the
+returned operation has status `"pending"`.
+3. **Execute** - once enough owners have confirmed, calling `prepareShield`
+with the `proposalId` returns a `"ready"` operation.
+
+Unlike the EOA flow, a Safe shield is relayed with the built-in broadcaster
+rather than sent directly with the signer, and the Safe must already hold the
+funds being shielded.
+
+:::code-group
+
+```ts [shield.ts] filename="shield.ts"
+import { alicePlugin, bobPlugin } from "./config";
+
+const contract = process.env.USDC_ADDRESS;
+
+const to = await alicePlugin.instanceId();
+const amount = 1n;
+const asset = {
+  asset: {
+    __type: "erc20",
+    contract,
+  },
+  amount,
+};
+
+// 1. One owner proposes the deposit.
+const { proposalId } = await alicePlugin.prepareShield(asset, to);
+
+// 2. Every other owner confirms it using the same proposal id.
+await bobPlugin.prepareShield(asset, to, proposalId);
+
+// 3. Once the Safe's threshold is met, an owner executes and broadcasts.
+const operation = await alicePlugin.prepareShield(asset, to, proposalId);
+
+await alicePlugin.broadcast(operation);
+```
+
+```ts [config.ts] filename="config.ts"
+import { JsonRpcProvider, Wallet } from "ethers";
+import { createBermudaSafePlugin, KeyGenState } from "@kohaku-eth/bermuda";
+
+const provider = new JsonRpcProvider(process.env.RPC_URL);
+const safeAddress = process.env.SAFE_ADDRESS;
+
+// Signers for two of the Safe's owners.
+const aliceSigner = new Wallet(process.env.ALICE_PRIVATE_KEY, provider);
+const bobSigner = new Wallet(process.env.BOB_PRIVATE_KEY, provider);
+
+// This is the (mocked) Kohaku host.
+const host = {
+  provider: {
+    ...provider,
+    getChainId: async () => (await provider.getNetwork()).chainId,
+  },
+};
+
+export const alicePlugin = await createBermudaSafePlugin(host, aliceSigner, safeAddress);
+export const bobPlugin = await createBermudaSafePlugin(host, bobSigner, safeAddress);
+
+// Run the distributed key generation ceremony once before preparing operations.
+// See the Accounts page for details.
+let sessionId: string | undefined;
+let next: KeyGenState | null = null;
+
+do {
+  ({ next, sessionId } = await alicePlugin.runNextKeyGenStep(sessionId));
+  await bobPlugin.runNextKeyGenStep(sessionId);
+} while (next !== null);
+```
+
+:::

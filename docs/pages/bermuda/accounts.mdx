@@ -1,0 +1,114 @@
+# Accounts
+
+Bermuda supports two kinds of accounts, each backed by its own plugin:
+
+- **[EOA accounts](#eoa-accounts)** via `createBermudaPlugin` - controlled by a
+single externally owned account.
+- **[Safe accounts](#safe-accounts)** via `createBermudaSafePlugin` - controlled
+by a [Safe](https://safe.global) multisig.
+
+Both accounts are deterministically derived - the same signer (or the same set
+of Safe owners) always produces the same Bermuda account - and both expose the
+same shield, transfer, unshield, balance, and broadcast operations.
+
+## EOA Accounts
+
+The Bermuda account is automatically derived from the main private key with
+which the user controls their main Ethereum address.
+
+Passing-in an [Ethers](https://ethers.org) or [Viem](https://viem.sh) compatible signer to the
+`createBermudaPlugin` function will automatically create a Bermuda account for
+the signer.
+
+The Bermuda account is deterministically derived, meaning that using the same
+signer will always produce the same Bermuda account.
+
+```ts
+import { JsonRpcProvider, Wallet } from "ethers";
+import { createBermudaPlugin } from "@kohaku-eth/bermuda";
+
+const provider = new JsonRpcProvider(process.env.RPC_URL);
+const signer = new Wallet(process.env.PRIVATE_KEY, provider);
+
+// This is the (mocked) Kohaku host.
+const host = {
+  provider: {
+    ...provider,
+    getChainId: async () => (await provider.getNetwork()).chainId,
+  },
+};
+
+const plugin = await createBermudaPlugin(host, signer);
+
+// ... Use plugin to shield, transfer, transact, query shielded balance, etc.
+```
+
+## Safe Accounts
+
+For [Safe](https://safe.global) multisig accounts use `createBermudaSafePlugin`.
+In addition to the host and a signer for one of the Safe's owners, it takes the
+Safe's address.
+
+Because no single party holds the shielded private key, it is produced
+collaboratively by the Safe's owners through a **distributed key generation
+(DKG)** ceremony. Until that ceremony completes the plugin cannot prepare
+operations or report its shielded address.
+
+### Resuming with an existing owner
+
+If you have already completed the DKG ceremony and persisted the resulting
+shielded owner, pass it as the final argument to skip key generation:
+
+```ts
+import { createBermudaSafePlugin } from "@kohaku-eth/bermuda";
+
+const plugin = await createBermudaSafePlugin(host, signer, safeAddress, owner);
+
+// Ready to shield, transfer, unshield, etc.
+```
+
+### Running the key generation ceremony
+
+When no owner is supplied, each Safe owner drives the ceremony with their own
+plugin instance by repeatedly calling `runNextKeyGenStep`. One owner leads each
+round and every other owner follows using the **same `sessionId`**. Repeat until
+`runNextKeyGenStep` reports `next: null`, at which point the shielded owner is
+set on every plugin and they are ready for operations.
+
+```ts
+import { JsonRpcProvider, Wallet } from "ethers";
+import { createBermudaSafePlugin, KeyGenState } from "@kohaku-eth/bermuda";
+
+const provider = new JsonRpcProvider(process.env.RPC_URL);
+const safeAddress = process.env.SAFE_ADDRESS;
+
+// Signers for two of the Safe's owners. Shown here in a single process for
+// illustration; in practice each owner runs their own instance on their own
+// machine and only shares the `sessionId`.
+const aliceSigner = new Wallet(process.env.ALICE_PRIVATE_KEY, provider);
+const bobSigner = new Wallet(process.env.BOB_PRIVATE_KEY, provider);
+
+// This is the (mocked) Kohaku host.
+const host = {
+  provider: {
+    ...provider,
+    getChainId: async () => (await provider.getNetwork()).chainId,
+  },
+};
+
+const alicePlugin = await createBermudaSafePlugin(host, aliceSigner, safeAddress);
+const bobPlugin = await createBermudaSafePlugin(host, bobSigner, safeAddress);
+
+let sessionId: string | undefined;
+let next: KeyGenState | null = null;
+
+do {
+  // The leader advances a round and produces / forwards the session id...
+  ({ next, sessionId } = await alicePlugin.runNextKeyGenStep(sessionId));
+  // ...and every other owner follows with the same session id.
+  await bobPlugin.runNextKeyGenStep(sessionId);
+} while (next !== null);
+
+// Both plugins now share the Safe's shielded owner and are ready to use.
+const safeShieldedAddress = await alicePlugin.instanceId();
+```

@@ -1,0 +1,95 @@
+# Compliance
+
+Bermuda is built on the principle that privacy and compliance can coexist.
+The protocol includes a modular compliance framework that allows operators,
+regulators, and institutions to enforce rules without compromising user privacy.
+
+## Overview
+
+Bermuda applies compliance across the full lifecycle of shielded funds through
+three connected stages:
+
+1. **Pre-shield check** - Screen and authorize deposits before they enter the
+pool.
+2. **Retroactive flagging** - Re-screen depositor addresses after deposit and
+update blacklist state when new threats emerge.
+3. **Withdrawal enforcement** - Prove at withdrawal that funds exclude
+blacklisted lineage, preserving privacy for compliant users.
+
+This design makes Bermuda **retroactively compliant**: a deposit admitted under
+one compliance state can be evaluated under a later one. If a depositor address
+is flagged after a deposit was already accepted, the affected funds can be
+constrained without rolling back the pool or forcing unrelated users to reveal
+their activity.
+
+## Pre-Shield Check
+
+Before any funds enter the shielded pool, the depositing address passes through
+a compliance check:
+
+1. A user initiates a deposit of public assets into the Bermuda pool.
+2. The depositor address is screened against a policy. If the address fails the
+policy check, the deposit is rejected.
+3. On approval, compliance artifacts are attached and the deposit is associated
+with a randomly assigned `deposit_id`.
+4. The pool verifies the proof and authorization, then inserts the new note
+commitment into the shielded state.
+
+This prevents the pool from becoming an open entry point for illicit funds while
+allowing approved funds to move through the shielded transaction engine.
+
+## Retroactive Flagging
+
+Traditional compliance systems operate on a pass / fail basis at the time of
+transaction. Bermuda goes further - a deposit that was accepted earlier can
+still be constrained later if the depositor address is subsequently flagged.
+
+### How It Works
+
+1. **Re-screening** - The compliance engine periodically checks previously
+accepted depositor addresses against the active policy.
+2. **Mapping to deposit lineage** - Deposit-time metadata records which
+depositor address is associated with each `deposit_id`. When an address is
+flagged, the system identifies which `deposit_id` lineage must be constrained.
+3. **Blacklist update** - The compliance engine rebuilds or extends the
+blacklist state and publishes an updated blacklist root used by withdrawal
+proofs.
+4. **Withdrawal path change** - Funds associated with blacklisted lineage lose
+the private withdrawal path and are forced onto the public path.
+
+## Withdrawal Enforcement
+
+When funds leave the shielded pool, Bermuda verifies that the withdrawal meets
+compliance requirements:
+
+**Private withdrawal path (compliant funds):** The SDK constructs a
+zero-knowledge Proof of Innocence (POI) - a proof that the withdrawn funds
+exclude blacklisted `deposit_id` lineage under the current blacklist state.
+The pool verifies this proof on-chain without revealing the user's identity,
+balance, or transaction history.
+
+**Public withdrawal path (blacklisted funds):** The relevant `deposit_id` values
+become public, and inclusion proofs show that the withdrawn funds belong to
+blacklisted lineage. The compliance engine can use the `deposit_id`-to-depositor
+mapping recorded at deposit time to relate the withdrawal back to the original
+deposit.
+
+### Practical Applications
+
+| Scenario | How withdrawal checks help |
+|----------|----------------------------|
+| Withdrawing to an exchange | The exchange can verify the proof to accept the deposit without additional KYC friction |
+| Receiving a payment | The recipient can confirm the funds are not tainted |
+| Regulatory audit | Compliance teams can verify proofs without accessing user data |
+| Cross-chain transfers | Destination chains or bridges can verify compliance before accepting funds |
+
+## Modular Compliance Layer
+
+Bermuda's compliance system is designed as a pluggable module.
+Integrators can configure compliance policies to match their regulatory
+requirements, jurisdiction, and risk appetite - without modifying the core
+protocol.
+
+Different deployments can operate under different compliance regimes while
+sharing the same privacy infrastructure. The framework supports KYC / AML
+workflows, jurisdiction-specific rules, and custom policies out of the box.

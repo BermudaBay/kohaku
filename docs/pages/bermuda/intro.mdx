@@ -1,0 +1,54 @@
+# Introduction to Bermuda
+
+## What is Bermuda?
+
+Bermuda is an enterprise-grade privacy layer for EVM-compatible blockchains.
+It uses zero-knowledge cryptography to enable private, compliant, and gasless
+transactions on top of any existing EVM chain.
+
+You can read more about Bermuda [here](https://bermudabay.xyz).
+
+## Installation
+
+Install [@kohaku-eth/bermuda](https://www.npmjs.com/package/@kohaku-eth/bermuda)
+via your package manager of choice.
+
+:::code-group
+
+```bash [npm]
+npm install @kohaku-eth/bermuda
+```
+
+```bash [pnpm]
+pnpm install @kohaku-eth/bermuda
+```
+
+```bash [yarn]
+yarn add @kohaku-eth/bermuda
+```
+
+```bash [bun]
+bun install @kohaku-eth/bermuda
+```
+
+:::
+
+## Account Types
+
+Bermuda ships two plugins depending on how the underlying account is controlled:
+
+- **`BermudaPlugin`** - backed by a single externally owned account (EOA) and
+created with `createBermudaPlugin`. Operations are authorized directly by the
+account's signer.
+- **`BermudaSafePlugin`** - backed by a [Safe](https://safe.global) multisig
+account and created with `createBermudaSafePlugin`. The shielded key is produced
+by a distributed key generation (DKG) ceremony among the Safe's owners, and
+every operation follows a propose / confirm / execute flow.
+
+Both plugins expose the same set of operations - shielding, shielded transfers,
+unshielding, balance queries, and broadcasting - so the rest of these docs
+applies to both unless noted otherwise.
+
+## Next Steps
+
+Now that you have the Bermuda plugin installed you can start using it to create a bermuda account.

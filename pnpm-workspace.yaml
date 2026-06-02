@@ -5,10 +5,13 @@ allowBuilds:
   keccak: true
   msgpackr-extract: true
   protobufjs: true
+  bufferutil: true
+  utf-8-validate: true
 autoInstallPeers: false
 blockExoticSubdeps: false
 packages:
   - "packages/provider"
+  - "packages/bermuda"
   - "packages/privacy-pools"
   - "packages/plugins"
   - "packages/tornado-cash"

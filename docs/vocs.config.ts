@@ -72,6 +72,44 @@ export default defineConfig({
       ]
     },
     {
+      text: '@kohaku-eth/bermuda',
+      disabled: true,
+      collapsed: true,
+      items: [
+        {
+          text: 'Introduction',
+          link: '/bermuda/intro'
+        },
+        {
+          text: 'Accounts',
+          link: '/bermuda/accounts'
+        },
+        {
+          text: "Shielding",
+          link: '/bermuda/shielding',
+          collapsed: true,
+          items: [
+            {
+              text: 'Shielding',
+              link: '/bermuda/shielding'
+            },
+            {
+              text: 'Unshielding',
+              link: '/bermuda/unshielding'
+            }
+          ]
+        },
+        {
+          text: "Transacting",
+          link: '/bermuda/txs'
+        },
+        {
+          text: "Compliance",
+          link: '/bermuda/compliance'
+        }
+      ]
+    },
+    {
       text: '@kohaku-eth/privacy-pools (WIP)',
       disabled: true,
       collapsed: true,

@@ -1,0 +1,52 @@
+{
+  "name": "@kohaku-eth/bermuda",
+  "version": "0.0.1-alpha.1",
+  "description": "Simplified Bermuda TS utils",
+  "type": "module",
+  "private": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ethereum/kohaku.git",
+    "directory": "packages/bermuda"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "echo Building @kohaku-eth/bermuda && tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run --no-file-parallelism",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@kohaku-eth/plugins": "workspace:*",
+    "@kohaku-eth/provider": "workspace:*",
+    "@bermuda/sdk": "https://api.tilapialabs.xyz/bermuda/v0/sdk/v0.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.2",
+    "ethers": "^6.14.4",
+    "vite": "^8.0.2",
+    "vitest": "^4.1.1"
+  }
+}
